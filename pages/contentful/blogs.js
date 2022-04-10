@@ -1,5 +1,5 @@
 import { createClient } from "contentful";
-import ContentfulBlogs from "../../components/contentfulBlogs";
+import ContentfulBlogs from "../../components/ContentfulBlogs";
 
 export default function Home({ blogs }) {
   return (
