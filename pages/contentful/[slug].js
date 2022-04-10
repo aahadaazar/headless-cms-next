@@ -1,6 +1,7 @@
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import { createClient } from "contentful";
 import moment from "moment";
+import Skeleton from "../../components/Skeleton";
 
 
 const client = createClient({
@@ -19,19 +20,30 @@ export async function getStaticPaths() {
 
   return {
     paths,
-    fallback: false,
+    fallback: true,
   };
 }
 
 export async function getStaticProps({ params: { slug } }) {
   const { items } = await client.getEntries({ content_type: 'personalBlogs', 'fields.slug': slug });
+
+  if (!items.length) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/404',
+      }
+    }
+  }
   return {
-    props: { blogData: items[0] }
+    props: { blogData: items[0] },
+    revalidate: 1
   };
 }
 
 export default function PostPage({ blogData }) {
-  const { preview, slug, title, dated, content } = blogData.fields;
+  if (!blogData) return <Skeleton />
+  const { title, dated, content } = blogData.fields;
   return (
     <div className='prose mx-auto'>
       <h1 className="mb-3">{title}</h1>
