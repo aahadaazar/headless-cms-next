@@ -31,7 +31,6 @@ export async function getStaticProps({ params: { slug } }) {
 }
 
 export default function PostPage({ blogData }) {
-  console.log(blogData);
   const { preview, slug, title, dated, content } = blogData.fields;
   return (
     <div className='prose mx-auto'>
